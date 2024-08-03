@@ -10,7 +10,7 @@ conexion.connnect_db()
 
 category = Category(None, None)
 
-category.create_category(conexion)
+category.update_category_name(conexion)
 
 #category.delete_category(conexion, 1)
 

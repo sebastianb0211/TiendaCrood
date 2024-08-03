@@ -7,4 +7,4 @@ conexion.connnect_db()
 
 
 employee = Employee(None, None, None, None, None, None, None)
-employee.create_employee(conexion)
+employee.update_employee(conexion)

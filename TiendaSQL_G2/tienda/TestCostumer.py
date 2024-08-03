@@ -9,4 +9,4 @@ conexion.connnect_db()
 
 customer = Customer(None, None, None, None, None, None, None)
 
-customer.create_customer(conexion)
+customer.update_customer(conexion)

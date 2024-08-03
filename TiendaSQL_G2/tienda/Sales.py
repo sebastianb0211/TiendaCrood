@@ -1,7 +1,7 @@
 from Conexion import Conexion
 
 
-class Sale:
+class Sales:
     sale_id = None
     sale_date = None
     customer_id = None
@@ -87,7 +87,7 @@ class Sale:
 
     @staticmethod
     def from_row(row):
-        return Sale(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7])
+        return Sales(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7])
 
     def create_sale(self, db):
         self._sale_id = int(input("ID de venta: "))
@@ -102,13 +102,13 @@ class Sale:
         params = (self._sale_id, self._sale_date, self._customer_id, self._product_id, self._price, self._quantity, self._total, self._employee_id)
         db.execute_query(query, params)
 
-    def select_sales(self, db):
-        query = "SELECT * FROM sale"
+    def select_sale(self, db):
+        query = "SELECT * FROM sales"
         result = db.execute_query(query)
         if result:
             sales = []
             for row in result:
-                sale = Sale.from_row(row)
+                sale = Sales.from_row(row)
                 sales.append(sale)
                 print(f"ID de venta: {row[0]}, Fecha de venta: {row[1]}, ID de cliente: {row[2]}, ID de producto: {row[3]}, Precio: {row[4]}, Cantidad: {row[5]}, Total: {row[6]}, ID de empleado: {row[7]}")
             return sales
@@ -119,3 +119,47 @@ class Sale:
     def delete_sale(self, db, sale_id):
         query = "DELETE FROM sale WHERE sale_id = %s"
         db.execute_query(query, (sale_id,))
+
+    def update_sale(self, db):
+        sale_id = int(input("Ingrese el ID de la venta a actualizar: "))
+        print("Ingrese los nuevos datos de la venta (deje en blanco para mantener el valor actual):")
+        new_sale_date = input("Nueva fecha de venta (YYYY-MM-DD HH:MM:SS): ").strip()
+        new_customer_id = input("Nuevo ID de cliente: ").strip()
+        new_product_id = input("Nuevo ID de producto: ").strip()
+        new_price = input("Nuevo precio: ").strip()
+        new_quantity = input("Nueva cantidad: ").strip()
+        new_total = input("Nuevo total: ").strip()
+        new_employee_id = input("Nuevo ID de empleado: ").strip()
+
+        query = "UPDATE sales SET "
+        params = []
+
+        if new_sale_date:
+            query += "sale_date = %s, "
+            params.append(new_sale_date)
+        if new_customer_id:
+            query += "customer_id = %s, "
+            params.append(int(new_customer_id))
+        if new_product_id:
+            query += "product_id = %s, "
+            params.append(int(new_product_id))
+        if new_price:
+            query += "price = %s, "
+            params.append(float(new_price))
+        if new_quantity:
+            query += "quantity = %s, "
+            params.append(int(new_quantity))
+        if new_total:
+            query += "total = %s, "
+            params.append(float(new_total))
+        if new_employee_id:
+            query += "employee_id = %s, "
+            params.append(int(new_employee_id))
+
+        if params:
+            query = query.rstrip(", ")  # Remove trailing comma and space
+            query += " WHERE sale_id = %s"
+            params.append(sale_id)
+            db.execute_query(query, tuple(params))
+        else:
+            print("No se realizaron cambios, todos los valores estaban vacíos.")

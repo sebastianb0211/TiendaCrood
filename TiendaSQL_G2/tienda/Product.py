@@ -108,3 +108,44 @@ class Product:
     def delete_product(self, db, product_id):
         query = "DELETE FROM product WHERE product_id = %s"
         db.execute_query(query, (product_id,))
+
+    def update_product(self, db):
+        product_id = int(input("Ingrese el ID del producto a actualizar: "))
+        print("Ingrese los nuevos datos del producto (deje en blanco para mantener el valor actual):")
+        new_name = input("Nuevo nombre: ").strip()
+        new_description = input("Nueva descripción: ").strip()
+        new_category_id = input("Nuevo ID de categoría: ").strip()
+        new_price = input("Nuevo precio: ").strip()
+        new_quantity = input("Nueva cantidad: ").strip()
+        new_brand = input("Nueva marca: ").strip()
+
+        query = "UPDATE product SET "
+        params = []
+
+        if new_name:
+            query += "product_name = %s, "
+            params.append(new_name)
+        if new_description:
+            query += "description = %s, "
+            params.append(new_description)
+        if new_category_id:
+            query += "category_id = %s, "
+            params.append(int(new_category_id))
+        if new_price:
+            query += "price = %s, "
+            params.append(float(new_price))
+        if new_quantity:
+            query += "quantity = %s, "
+            params.append(int(new_quantity))
+        if new_brand:
+            query += "brand = %s, "
+            params.append(new_brand)
+
+        if params:
+            query = query.rstrip(", ")  # Remove trailing comma and space
+            query += " WHERE product_id = %s"
+            params.append(product_id)
+            db.execute_query(query, tuple(params))
+        else:
+            print("No se realizaron cambios, todos los valores estaban vacíos.")
+

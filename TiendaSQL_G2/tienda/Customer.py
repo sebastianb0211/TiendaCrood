@@ -101,3 +101,43 @@ class Customer:
     def delete_customer(self, db, customer_id):
         query = "DELETE FROM customer WHERE customer_id = %s"
         db.execute_query(query, (customer_id,))
+
+    def update_customer(self, db):
+        customer_id = int(input("Ingrese el ID del cliente a actualizar: "))
+        print("Ingrese los nuevos datos del cliente (deje en blanco para mantener el valor actual):")
+        new_name = input("Nuevo nombre: ").strip()
+        new_last_name = input("Nuevo apellido: ").strip()
+        new_email = input("Nuevo email: ").strip()
+        new_password = input("Nueva contraseña: ").strip()
+        new_type = input("Nuevo tipo: ").strip()
+        new_points = input("Nuevos puntos: ").strip()
+
+        query = "UPDATE customer SET "
+        params = []
+
+        if new_name:
+            query += "customer_name = %s, "
+            params.append(new_name)
+        if new_last_name:
+            query += "customer_last_name = %s, "
+            params.append(new_last_name)
+        if new_email:
+            query += "email = %s, "
+            params.append(new_email)
+        if new_password:
+            query += "customer_password = %s, "
+            params.append(new_password)
+        if new_type:
+            query += "customer_type = %s, "
+            params.append(new_type)
+        if new_points:
+            query += "points = %s, "
+            params.append(int(new_points))
+
+        if params:
+            query = query.rstrip(", ")  # Remove trailing comma and space
+            query += " WHERE customer_id = %s"
+            params.append(customer_id)
+            db.execute_query(query, tuple(params))
+        else:
+            print("No se realizaron cambios, todos los valores estaban vacíos.")

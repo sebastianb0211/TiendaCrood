@@ -2,7 +2,6 @@ from Conexion import Conexion
 
 
 
-
 class Category:
     category_id = None
     category_name = None
@@ -59,6 +58,13 @@ class Category:
     def delete_category(self, db , category_id):
         query = "DELETE FROM category WHERE category_id = %s"
         db.execute_query(query, (category_id,))
+
+    def update_category_name(self, db):
+        category_id = int(input("Ingrese el ID de la categoría a actualizar: "))
+        new_category_name = input("Ingrese el nuevo nombre de la categoría: ")
+        query = "UPDATE category SET category_name = %s WHERE category_id = %s"
+        db.execute_query(query, (new_category_name, category_id))
+
 
 
 

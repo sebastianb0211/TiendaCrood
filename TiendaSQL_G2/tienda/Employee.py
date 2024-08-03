@@ -109,3 +109,43 @@ class Employee:
         query = "DELETE FROM employee WHERE employee_id = %s"
         db.execute_query(query, (employee_id,))
 
+    def update_employee(self, db):
+        employee_id = int(input("Ingrese el ID del empleado a actualizar: "))
+        print("Ingrese los nuevos datos del empleado (deje en blanco para mantener el valor actual):")
+        new_name = input("Nuevo nombre: ").strip()
+        new_last_name = input("Nuevo apellido: ").strip()
+        new_email = input("Nuevo email: ").strip()
+        new_password = input("Nueva contraseña: ").strip()
+        new_salary = input("Nuevo salario: ").strip()
+        new_position = input("Nueva posición: ").strip()
+
+        query = "UPDATE employee SET "
+        params = []
+
+        if new_name:
+            query += "employee_name = %s, "
+            params.append(new_name)
+        if new_last_name:
+            query += "employee_last_name = %s, "
+            params.append(new_last_name)
+        if new_email:
+            query += "email = %s, "
+            params.append(new_email)
+        if new_password:
+            query += "employee_password = %s, "
+            params.append(new_password)
+        if new_salary:
+            query += "salary = %s, "
+            params.append(float(new_salary))
+        if new_position:
+            query += "position = %s, "
+            params.append(new_position)
+
+        if params:
+            query = query.rstrip(", ")  # Remove trailing comma and space
+            query += " WHERE employee_id = %s"
+            params.append(employee_id)
+            db.execute_query(query, tuple(params))
+        else:
+            print("No se realizaron cambios, todos los valores estaban vacíos.")
+
